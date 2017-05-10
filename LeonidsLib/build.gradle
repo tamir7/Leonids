@@ -24,11 +24,11 @@ group = GROUP
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    buildToolsVersion "25.0.3"
 
     defaultConfig {
         minSdkVersion 11
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName VERSION_NAME
     }
@@ -103,7 +103,7 @@ bintray {
         vcsUrl = GIT_URL
         issueTrackerUrl = ISSUE_TRACKER_URL
         licenses = ['Apache-2.0']
-        labels = ['Android', 'Contacts']
+        labels = ['Android']
         publicDownloadNumbers = true
         publish = true
     }
