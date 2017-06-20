@@ -44,6 +44,7 @@ public class ParticleSystem {
 	private Random mRandom;
 
 	private ParticleField mDrawingView;
+    private final Object drawingViewLock = new Object();
 
 	private ArrayList<Particle> mParticles;
 	private final List<Particle> mActiveParticles = new ArrayList<>();
@@ -686,6 +687,11 @@ public class ParticleSystem {
 		if (minValue == maxValue) {
 			return minValue;
 		}
+
+		if (minValue > maxValue) {
+            return getFromRange(maxValue, minValue);
+        }
+
 		return mRandom.nextInt(maxValue-minValue) + minValue;
 	}
 
@@ -706,15 +712,19 @@ public class ParticleSystem {
 				}
 			}
 		}
-		if (mDrawingView != null) {
-            mDrawingView.setParticles(mActiveParticles);
-            mDrawingView.postInvalidate();
+		synchronized (drawingViewLock) {
+            if (mDrawingView != null) {
+                mDrawingView.setParticles(mActiveParticles);
+                mDrawingView.postInvalidate();
+            }
         }
 	}
 
 	private void cleanupAnimation() {
 		mParentView.removeView(mDrawingView);
-		mDrawingView = null;
+        synchronized (drawingViewLock) {
+            mDrawingView = null;
+        }
 		mParentView.postInvalidate();
 		mParticles.addAll(mActiveParticles);
 	}
